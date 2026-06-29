@@ -1,0 +1,21 @@
+.DS_Store
+.jj/
+
+# Swift / Xcode
+.build/
+.swiftpm/
+DerivedData/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+# macOS packaging
+*.dSYM/
+*.ipa
+*.pkg
+
+# Local environment
+.env
+.env.*
+!.env.example
+
