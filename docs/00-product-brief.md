@@ -2,9 +2,9 @@
 
 ## Vision
 
-Muster is a native macOS app for running multiple coding agents with durable terminal sessions, visible status, and fast attach/detach workflows.
+Muster is a native macOS app for running multiple coding agents with durable terminal sessions, visible status, and fast attach/detach workflows. A later iPhone companion app should provide mobile monitoring, notifications, and approved control actions for Mac-hosted sessions.
 
-The target user is a developer who has several agents working across repositories, branches, or worktrees and needs a single place to observe progress, jump into terminals, send instructions, and coordinate follow-up work.
+The target user is a developer who has several agents working across repositories, branches, or worktrees and needs a single place to observe progress, jump into terminals, send instructions, and coordinate follow-up work. The same user may also want to check whether an agent is blocked or waiting for input from an iPhone without turning the phone into the primary terminal environment.
 
 ## Product shape
 
@@ -18,6 +18,8 @@ The first screen should be the active work surface:
 - Inspector for session metadata, logs, prompts, and actions.
 - Command palette for launch, attach, send, split, stop, and archive actions.
 
+The iPhone companion should have a different shape: session triage, notifications, status detail, and safe message sending. Full terminal control should remain a secondary escape hatch until the Mac workflow is proven.
+
 ## Target capabilities
 
 - Launch a coding agent in a fresh Herdr-backed terminal.
@@ -28,6 +30,8 @@ The first screen should be the active work surface:
 - Send text or commands into one or more sessions.
 - Surface important events through native macOS notifications.
 - Provide a local MCP server so agents can observe and coordinate controlled parts of the system.
+- Pair an iPhone with a trusted Mac for read-only session monitoring and later approved control actions.
+- Notify the iPhone when sessions are waiting, blocked, completed, or failed.
 
 ## Non-goals for the first version
 
@@ -36,6 +40,8 @@ The first screen should be the active work surface:
 - Build remote collaboration before the local single-user workflow is excellent.
 - Ship through the Mac App Store if sandboxing blocks core terminal/agent workflows.
 - Support every terminal emulator feature before proving the agent workflow.
+- Run Herdr, arbitrary shells, or coding-agent CLIs locally on iPhone.
+- Make mobile remote control the primary workflow before the local Mac workflow is excellent.
 
 ## Design principles
 
@@ -44,4 +50,4 @@ The first screen should be the active work surface:
 - Terminal quality matters: the terminal should feel fast, accurate, and familiar enough that users trust it for real work.
 - Agent state should come from structured sources where possible, not fragile terminal scraping.
 - Dangerous operations should be explicit, visible, and auditable.
-
+- Mobile actions should be narrower than Mac actions and should go through pairing, policy, and audit logging.

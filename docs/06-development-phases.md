@@ -112,7 +112,35 @@ Exit criteria:
 
 - A new user can install, configure, run, and trust the app without developer intervention.
 
-## Phase 6: Advanced workflows
+## Phase 6: iPhone companion app
+
+Goal: let the user monitor and lightly control Mac-hosted sessions from iPhone without moving the backend off the Mac.
+
+Prerequisites:
+
+- The Mac app can reliably show structured session and agent state.
+- The policy and audit model exists for bridge or app-originated actions.
+- The team has answered the initial pairing, notification, and App Store review questions.
+
+Deliverables:
+
+- Shared schema package usable by Mac and iPhone targets.
+- Companion API exposed by the Mac app or helper.
+- Trusted-device pairing prototype.
+- Read-only iPhone session list and detail views.
+- Waiting/blocked/completed/failed notification handling.
+- Message-only control action with visible Mac-side audit log.
+- Handoff path from iPhone back to the Mac app.
+
+Exit criteria:
+
+- A user can pair one iPhone with one trusted Mac.
+- A user can see active sessions and understand which agents need attention.
+- A user can send a visible message to a selected session.
+- Every state-changing phone action is policy-checked and auditable.
+- The iPhone app does not require Herdr, Ghostty, or local shell execution on iOS.
+
+## Phase 7: Advanced workflows
 
 Goal: extend beyond local session management once the local workflow is strong.
 
@@ -122,6 +150,7 @@ Possible deliverables:
 - Multi-agent task boards.
 - Session summaries.
 - Remote Herdr host support.
+- Remote iPhone access through a relay or account model.
 - Team-shared presets.
 - Richer MCP tools.
 - Deep GitHub integration.
@@ -130,4 +159,3 @@ Possible deliverables:
 Exit criteria:
 
 - Advanced features do not compromise the local native workflow.
-

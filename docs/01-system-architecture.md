@@ -32,6 +32,17 @@ Muster Bridge
   Local MCP server
   Controlled read/send/session APIs
   Policy and audit layer
+
+Muster iPhone
+  SwiftUI iOS companion UI
+  Paired Mac client
+  Shared schema models
+  Notifications and handoff
+
+Companion API
+  Authenticated user-device control API
+  Read-only status, notifications, and approved actions
+  Shares policy and audit concepts with the bridge
 ```
 
 ## Layer responsibilities
@@ -89,6 +100,30 @@ The bridge is a local MCP server that exposes selected Muster/Herdr operations t
 
 It should be intentionally narrower than the full app API. Agents need structured awareness and safe coordination primitives, not unrestricted shell access by default.
 
+### Muster iPhone
+
+The iPhone app is a companion surface for the user, not a local Herdr host.
+
+Expected responsibilities:
+
+- Pair with a trusted Mac.
+- Show project, session, and agent status.
+- Show recent structured events.
+- Receive notifications for waiting, blocked, completed, and failed sessions.
+- Send visible messages or approved actions through policy-controlled APIs.
+- Hand off to the Mac app for full terminal work.
+
+### Companion API
+
+The companion API is the user-device boundary between iPhone and the Mac-hosted Muster system.
+
+It should not expose the raw MCP bridge directly to the phone. The phone and coding agents have different trust models, but they can share:
+
+- Domain schemas.
+- Policy decisions.
+- Audit log storage.
+- Session and agent status projections.
+
 ## Data flow
 
 ### Dashboard state
@@ -114,6 +149,22 @@ User action -> App command -> HerdrKit -> Herdr socket or CLI -> target terminal
 ```
 
 Every command should return structured success/failure information to the app so failures can be shown without guessing from terminal output.
+
+### iPhone session monitoring
+
+```text
+Muster iPhone -> Companion API -> Muster Helper/App on Mac -> HerdrKit -> Herdr state
+```
+
+The phone should read structured state. It should not scrape terminal output or connect directly to Herdr internals.
+
+### iPhone control action
+
+```text
+iPhone action -> Companion API -> policy check -> audit log -> HerdrKit or app command
+```
+
+State-changing phone actions should be narrower than local Mac actions until the pairing and audit model is proven.
 
 ## Domain model
 
@@ -157,6 +208,13 @@ Preset
   command
   environment
   workingDirectoryRule
+
+PairedDevice
+  id
+  name
+  platform
+  trustLevel
+  lastSeenAt
 ```
 
 ## Persistence
@@ -171,6 +229,6 @@ Muster should persist only app-specific preferences and metadata:
 - Notification rules.
 - Display names.
 - Per-project app settings.
+- Paired device metadata and policy.
 
 Do not duplicate Herdr's session database unless there is a clear offline or migration need.
-

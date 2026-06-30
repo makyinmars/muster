@@ -20,6 +20,15 @@ muster/
       Tests/
         HerdrKitTests/
         MusterAppTests/
+    ios/
+      MusterMobile.xcodeproj or Package.swift
+      Sources/
+        MusterMobileApp/
+        PairedMacClient/
+        MusterShared/
+      Tests/
+        PairedMacClientTests/
+        MusterMobileAppTests/
   bridge/
     muster-mcp/
   scripts/
@@ -96,6 +105,36 @@ Recommended contents:
 - `AgentStatus.swift`
 - `CommandResult.swift`
 - `MusterError.swift`
+- `PairedDevice.swift`
+- `CompanionAction.swift`
+
+MusterShared should avoid AppKit, SwiftUI, and Ghostty dependencies so the same domain types can be reused by the Mac app, iPhone app, bridge, and tests.
+
+### MusterMobileApp
+
+The iPhone companion UI.
+
+Recommended contents:
+
+- `MusterMobileApp.swift`
+- `PairedMacsView.swift`
+- `MobileSessionListView.swift`
+- `MobileSessionDetailView.swift`
+- `WaitingForMeView.swift`
+- `MobileTimelineView.swift`
+- `MobileSettingsView.swift`
+
+### PairedMacClient
+
+Typed client for the companion API exposed by the Mac app/helper.
+
+Recommended contents:
+
+- `PairingClient.swift`
+- `CompanionAPIClient.swift`
+- `CompanionEventsStream.swift`
+- `DeviceTrustStore.swift`
+- `MobileNotificationRouter.swift`
 
 ## UI structure
 
@@ -158,3 +197,27 @@ Mac App Store distribution is risky because the app needs to:
 
 Sandbox viability should be investigated later, but it should not shape the MVP.
 
+## iPhone app structure
+
+The iPhone app should use a compact, triage-first layout rather than copying the Mac terminal workspace.
+
+```text
+TabView
+  Sessions
+    Project/session list
+    Agent status badges
+
+  Waiting
+    Sessions needing user input
+    Blocked sessions
+
+  Timeline
+    Recent important events
+
+  Settings
+    Paired Macs
+    Notification preferences
+    Allowed actions
+```
+
+The iPhone app can share Swift domain models with the Mac app, but it should not depend on HerdrKit or GhosttyKit directly.
