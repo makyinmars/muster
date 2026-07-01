@@ -28,6 +28,8 @@ Coding agent
 
 The bridge can start as a small standalone process. Later, it can share code with HerdrKit through a common schema package.
 
+The iPhone companion app should not talk to the MCP bridge directly. It should use a separate companion API because a user-controlled phone and an autonomous coding agent need different authentication, policy, and UI guarantees.
+
 ## Initial tools
 
 ### `muster.list_sessions`
@@ -91,6 +93,7 @@ The app should show this log in the inspector so users can understand cross-agen
 - Prefer sending visible text into target terminals over hidden control paths.
 - Require user opt-in for destructive worktree, branch, or process operations.
 - Keep the bridge local-only unless remote access becomes an explicit product area.
+- Keep companion-device access separate from agent MCP access, even if both reuse shared schemas and audit logs.
 
 ## Implementation path
 
@@ -100,4 +103,3 @@ The app should show this log in the inspector so users can understand cross-agen
 4. Add worktree creation.
 5. Add audit log in the Mac app.
 6. Add per-project policy settings.
-

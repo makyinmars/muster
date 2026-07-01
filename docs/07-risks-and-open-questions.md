@@ -55,6 +55,20 @@ Mitigation:
 - Require opt-in for destructive operations.
 - Avoid default raw-shell MCP tools.
 
+### iPhone companion security
+
+The iPhone companion app introduces a second control surface for Mac-hosted shells and agents.
+
+Mitigation:
+
+- Start read-only.
+- Require explicit trusted-device pairing.
+- Keep the companion API separate from the MCP bridge.
+- Policy-check every state-changing phone action.
+- Record phone-originated actions in the same audit log shown in the Mac app.
+- Do not expose arbitrary shell execution from the phone.
+- Validate App Store review constraints before committing to a shipping mobile feature set.
+
 ## Product risks
 
 ### Too much terminal, not enough workflow
@@ -75,6 +89,16 @@ Mitigation:
 - Build phases in order.
 - Do not implement remote/team features before the local workflow is strong.
 
+### Mobile app distracts from the Mac workflow
+
+An iPhone app could pull the product toward remote control before the core Mac workflow is proven.
+
+Mitigation:
+
+- Treat iPhone as a companion app, not a replacement product.
+- Build the Mac app and bridge policy first.
+- Keep the first iPhone version focused on monitoring, notifications, and visible handoff messages.
+
 ## Open questions
 
 - What is the exact Herdr object mapping from workspace/tab/pane/terminal/agent into Muster's Project/Session/Agent model?
@@ -87,6 +111,13 @@ Mitigation:
 - What is the minimum viable notification model?
 - Should the app store any terminal scrollback, or should Herdr remain the only session source of truth?
 - How should worktree cleanup be handled safely?
+- Should the iPhone companion MVP be LAN-only, or should remote access be part of the first mobile design?
+- What pairing model should authorize an iPhone to control a Mac-hosted Muster instance?
+- Which iPhone actions are safe for the first release: read-only, message, launch preset, stop, archive, create worktree?
+- Should phone-originated messages be inserted as terminal text, structured Herdr messages, or both?
+- Should iPhone notifications be direct from the Mac, delivered through APNs, or deferred until a hosted relay exists?
+- What happens when the paired Mac is asleep, offline, or on another network?
+- What App Store review constraints apply to remote terminal control, local network discovery, and command execution?
 
 ## Decision log
 
@@ -98,7 +129,7 @@ Reasoning:
 
 - Herdr already provides the terminal/session/agent backend primitives.
 - Ghostty offers the best available path to a high-quality native terminal.
-- Swift/AppKit/SwiftUI are the right fit for a Mac-only product.
+- Swift/AppKit/SwiftUI are the right fit for the Mac-first product shell.
 
 ### Initial name decision
 
@@ -110,3 +141,13 @@ Reasoning:
 - It is not tied too tightly to Herdr or Ghostty.
 - It supports product concepts like roster, sessions, projects, and bridge.
 
+### Initial iPhone scope decision
+
+Treat the iPhone app as a companion controller for Mac-hosted sessions, not as a local iOS terminal/session backend.
+
+Reasoning:
+
+- The product's durable session model depends on Herdr running on the Mac or another host.
+- The target terminal quality depends on a Mac-native Ghostty/libghostty integration.
+- iPhone is best suited for monitoring, notifications, and lightweight control.
+- Mobile actions need a tighter pairing, policy, and audit model than local Mac actions.
